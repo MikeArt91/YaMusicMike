@@ -1,0 +1,18 @@
+<resources>
+    <dimen name="activity_horizontal_margin">8dp</dimen>
+    <dimen name="activity_vertical_margin">8dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">250dp</dimen>
+    <dimen name="item_width">275dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="name">17sp</dimen>
+    <dimen name="genres">14sp</dimen>
+    <dimen name="albums">14sp</dimen>
+    <dimen name="tracks">14sp</dimen>
+    <dimen name="description">14sp</dimen>
+    <dimen name="bio">17sp</dimen>
+
+
+</resources>

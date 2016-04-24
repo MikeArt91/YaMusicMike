@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">YaMusicMike</string>
+    <string name="title_activity_web_view1">WebViewActivity1</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+</resources>

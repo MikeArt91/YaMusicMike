@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:id="@+id/relativeLayout">
+
+    <!-- Thumbnail Image -->
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/coverSmall"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="@+id/coverSmall"
+        android:layout_toRightOf="@+id/coverSmall"
+        android:layout_toEndOf="@+id/coverSmall"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:textSize="@dimen/name"
+        android:textStyle="bold"
+        android:textColor="@color/name"/>
+
+    <!-- Genres -->
+    <TextView
+        android:id="@+id/genres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginTop="1dp"
+        android:layout_alignStart="@id/name"
+        android:layout_alignLeft="@id/name"
+        android:textSize="@dimen/genres" />
+
+    <!-- Albums -->
+    <TextView
+        android:id="@+id/albums"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/genres"
+        android:layout_alignParentBottom="@+id/coverSmall"
+        android:layout_marginTop="18dp"
+        android:layout_alignStart="@id/name"
+        android:layout_alignLeft="@id/name"
+        android:textColor="@color/albums"
+        android:textSize="@dimen/albums" />
+
+    <!-- Tracks -->
+    <TextView
+        android:id="@+id/tracks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/tracks"
+        android:textSize="@dimen/tracks"
+        android:layout_alignTop="@+id/albums"
+        android:layout_toRightOf="@+id/albums"
+        android:layout_toEndOf="@+id/albums"
+        />
+
+</RelativeLayout>
