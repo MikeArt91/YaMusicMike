@@ -21,27 +21,26 @@ Task Description: Make Android application using Java. Parse JSON data from prov
 </p>
 
 Features:
-- Parsing JSON using Volley library 
+* Parsing JSON using Volley library 
 
 I choose Volley instead of others options (retrofit + picaso etc.) cause it supports nice caching, network images out of the box.
 And ammount of data to catch from JSON is really not that big. Volley handles it quite well.
-- Sorting. 
+* Sorting. 
 
 List of artists derived from JSON is mixed. Sorting was done using Collection.sort ignoring the case of the letters.
-- WebView
+* WebView
 
 Original task desription never mentioned creating a WebView, but JSON contains links to the personal pages of the most of artists (not all of them). So I decided to make simple WebView with a ProgressBar.
-- Text data modifications
+* Text data modifications
 
 Fixed encoding of a text data. The endings of nouns after numerals are corrected. First letter of description was capitalized (originally it wasn't ¯\_(ツ)_/¯)
-
-- Errors handling
+* Errors handling
 
 Several checks: network connection , availability of the JSON,  presence of artist's personal site.
 Toast messages are shown if something is wrong.
 
-- Collapsing toolbar layout
+* Design
 
-Looks really nice, that it :-) 
+Divider in RecyclerView provided by DividerItemDecoration.class. Collapsing toolbar layout in DetailActivity. It just looks nice :-) 
 
 
