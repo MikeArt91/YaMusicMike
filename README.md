@@ -13,7 +13,6 @@ Task Description: Make Android application using Java. Parse JSON data from prov
 - DetailActivity provides description of the Artist and a FloatingButton which leads to WebViewActivity
 - WebViewActivity will show artist's personal page on the Internet (if he has one)
 
-<b Screenshots>
 <p align="center">
   <img src="/screenshots/ListActivity.png" alt="ListActivity" width="250"/>
   <img src="/screenshots/DetailActivity.png" alt="DetailActivity" width="250"/>
