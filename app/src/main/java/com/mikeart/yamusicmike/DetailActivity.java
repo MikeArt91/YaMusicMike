@@ -1,15 +1,18 @@
 package com.mikeart.yamusicmike;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.android.volley.RequestQueue;
@@ -27,12 +30,15 @@ public class DetailActivity extends AppCompatActivity {
     TextView description;
 
     NetworkImageView coverBig;
+    Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        context = getApplicationContext();
         // проверка подключения к интернету
         CheckNetwork.isInternetAvailable(this);
 
@@ -74,8 +80,15 @@ public class DetailActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    intent.putExtra("link",link);
-                    startActivity(intent);
+                    // проверка наличия ссылки на сайт перед отправкой интента
+                    if( link != null && !link.isEmpty())
+                    {
+                        intent.putExtra("link",link);
+                        startActivity(intent);
+                        }
+                    else{
+                        Toast.makeText(context, "У исполнителя нет сайта(", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
