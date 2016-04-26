@@ -19,7 +19,7 @@ Task Description: Make Android application using Java. Parse JSON data from prov
   <img src="/screenshots/WebViewActivity.png" alt="WebViewActivity" width="250"/>
 </p>
 
-Features:
+#####Features:
 * Parsing JSON using Volley library 
 
 I choose Volley instead of others options (retrofit + picaso etc.) cause it supports nice caching, network images out of the box.
