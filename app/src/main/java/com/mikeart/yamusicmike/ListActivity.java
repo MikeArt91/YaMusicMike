@@ -1,19 +1,19 @@
 package com.mikeart.yamusicmike;
 
-import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,8 +26,7 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
-    // Log TAG
-    public static final String TAG = "YaRecyclerList";
+    public static final String TAG = ListActivity.class.getSimpleName();
 
     private static final String url = "http://download.cdn.yandex.net/mobilization-2016/artists.json";
     public List<Artist> artistList = new ArrayList<>();
@@ -35,19 +34,15 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private YaRecyclerAdapter adapter;
 
-
-    private ProgressDialog pDialog;
+    private ProgressBar mProgressbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-
-        pDialog = new ProgressDialog(this);
-        // Показывает диалоговое окно при загрузке
-        pDialog.setMessage("Загрузка...");
-        pDialog.show();
+        mProgressbar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressbar.setVisibility(View.VISIBLE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,12 +50,13 @@ public class ListActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, null));
 
-        updateList(url);
+        // проверка наличия подключения и запуск передачи из Json
+        if (CheckNetwork.isInternetAvailable(this)){
+            updateList(url);}
 
     }
 
@@ -70,43 +66,52 @@ public class ListActivity extends AppCompatActivity {
         adapter = new YaRecyclerAdapter(ListActivity.this, artistList);
         mRecyclerView.setAdapter(adapter);
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-
         adapter.clearAdapter();
 
-        // запрос объектов из JSON при помощи библиотеки volley
+        // запрос объектов из JSON
         JsonArrayRequest artistReq = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
-                        hidePDialog();
+                        mProgressbar.setVisibility(View.GONE);
 
-                        // Parsing json
                         for (int i = 0; i < response.length(); i++) {
                             try {
-
+        // добавление в базу полей из выбранного объекта с проверкой их наличия
                                 JSONObject obj = response.getJSONObject(i);
                                 Artist artist = new Artist();
 
-                                artist.setName(obj.getString("name"));
-                                artist.setAlbums(obj.getInt("albums"));
-                                artist.setTracks(obj.getInt("tracks"));
+                                if(obj.has("name")){
+                                artist.setName(obj.getString("name"));}
 
-                                artist.setId(obj.getInt("id"));
-                                artist.setLink(obj.getString("link"));
-                                artist.setDescription(obj.getString("description"));
+                                if(obj.has("albums")){
+                                artist.setAlbums(obj.getInt("albums"));}
+
+                                if(obj.has("tracks")){
+                                artist.setTracks(obj.getInt("tracks"));}
+
+                                if(obj.has("id")){
+                                artist.setId(obj.getInt("id"));}
+
+                                if(obj.has("link")){
+                                artist.setLink(obj.getString("link"));}
+
+                                if(obj.has("description")){
+                                artist.setDescription(obj.getString("description"));}
+
+                                if(obj.has("cover")){
                                 artist.setCoverBigUrl(obj.getJSONObject("cover").getString("big"));
+                                artist.setCoverSmallUrl(obj.getJSONObject("cover").getString("small"));}
 
-                                // обработка жанров как массива
-                                JSONArray genreArry = obj.getJSONArray("genres");
+                                // добавление жанров в строку
+                                JSONArray genresArray = obj.getJSONArray("genres");
+                                if(obj.has("genres")){
                                 ArrayList<String> genre = new ArrayList<String>();
-                                for (int j = 0; j < genreArry.length(); j++) {
-                                    genre.add((String) genreArry.get(j));
+                                for (int j = 0; j < genresArray.length(); j++) {
+                                    genre.add((String) genresArray.get(j));
                                 }
-                                artist.setGenres(genre);
-
-                                artist.setCoverSmallUrl(obj.getJSONObject("cover").getString("small"));
+                                artist.setGenres(genre);}
 
                                 artistList.add(artist);
 
@@ -130,25 +135,19 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                hidePDialog();
+                mProgressbar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), "Что-то пошло не так(", Toast.LENGTH_LONG).show();
             }
         });
 
         // добавление запроса в очередь
-        queue.add(artistReq);
+        YaSingleton.getInstance(this).addToRequestQueue(artistReq);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        hidePDialog();
-    }
-
-    private void hidePDialog() {
-        if (pDialog != null) {
-            pDialog.dismiss();
-            pDialog = null;
-        }
+        mProgressbar.setVisibility(View.GONE);
     }
 
 }

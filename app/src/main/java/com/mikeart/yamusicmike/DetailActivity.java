@@ -2,23 +2,24 @@ package com.mikeart.yamusicmike;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 public class DetailActivity extends AppCompatActivity {
+
+    String link;
+    Intent intent;
 
     TextView genres;
     TextView albums;
@@ -26,19 +27,19 @@ public class DetailActivity extends AppCompatActivity {
     TextView description;
 
     NetworkImageView coverBig;
-    ImageLoader mImageLoader;
-
-    String link;
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        // проверка подключения к интернету
+        CheckNetwork.isInternetAvailable(this);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-
+        // получение данных из интента и вывод на экран
         String stCoverBig = getIntent().getStringExtra("coverBig");
         String stGenres = getIntent().getStringExtra("genres");
         String stAlbums = getIntent().getStringExtra("albums");
@@ -53,7 +54,10 @@ public class DetailActivity extends AppCompatActivity {
         tracks = (TextView)findViewById(R.id.detail_tracks);
         description = (TextView)findViewById(R.id.detail_description);
 
-        mImageLoader = YaSingleton.getInstance(this).getImageLoader();
+        // инициализация mImageLoader для подгрузки картинки coverBig из кэша устройства (если она там есть)
+        RequestQueue queue= YaSingleton.getInstance(this.getApplicationContext()).
+                getRequestQueue();
+        ImageLoader mImageLoader = new ImageLoader(queue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         coverBig.setImageUrl(stCoverBig, mImageLoader);
 
         genres.setText(stGenres);
@@ -76,7 +80,7 @@ public class DetailActivity extends AppCompatActivity {
             });
         }
 
-        // Show the Up button in the action bar.
+        // показывает кнопку Up в ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -88,15 +92,7 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-           // NavUtils.navigateUpTo(this, new Intent(this, ListActivity.class));
-           // NavUtils.navigateUpFromSameTask(this);
+
             onBackPressed();
             return true;
         }

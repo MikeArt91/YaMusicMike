@@ -2,9 +2,6 @@ package com.mikeart.yamusicmike;
 
 import java.util.ArrayList;
 
-/**
- * Created by Mike on 18.04.2016.
- */
 public class Artist {
 
     private int id, albums, tracks;

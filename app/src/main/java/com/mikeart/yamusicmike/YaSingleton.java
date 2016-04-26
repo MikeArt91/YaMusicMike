@@ -1,17 +1,14 @@
 package com.mikeart.yamusicmike;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Used Singleton pattern from http://developer.android.com/intl/ru/training/volley/requestqueue.html
- */
+// использован синглтон-паттерн из http://developer.android.com/intl/ru/training/volley/requestqueue.html
+
 public class YaSingleton {
 
     private static YaSingleton mInstance;

@@ -26,11 +26,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="fill_parent"
+            android:layout_height="5dip"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"/>
+
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/webView"
-        />
+        android:layout_below="@+id/progressBar"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

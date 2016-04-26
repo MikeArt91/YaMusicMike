@@ -20,6 +20,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+    
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -30,6 +31,15 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="?attr/actionBarSize"
         tools:context=".ListActivity">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="?attr/actionBarSize"
+            style="@android:style/Widget.DeviceDefault.ProgressBar"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

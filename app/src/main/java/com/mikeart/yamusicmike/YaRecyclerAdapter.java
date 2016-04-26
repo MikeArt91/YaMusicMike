@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -18,15 +19,13 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Mike on 18.04.2016.
- */
 public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.ListRowViewHolder> {
 
     private List<Artist> artistList;
     private Context mContext;
-    private ImageLoader mImageLoader;
-    private int focusedItem = 0;
+
+    // albumsEnding и tracksEnding содержат возможные варианты окончаний
+    // для правильной их установки после числительного в методе getEnding
     private List<String> albumsEnding = Arrays.asList("альбом", "альбома", "альбомов");
     private List<String> tracksEnding = Arrays.asList("песня", "песни", "песен");
 
@@ -38,41 +37,47 @@ public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.Li
     @Override
     public ListRowViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int position) {
        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.content_list, null);
-       ListRowViewHolder holder = new ListRowViewHolder(v);
-       return holder;
+        return new ListRowViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ListRowViewHolder listRowViewHolder, int position) {
         Artist listItems = artistList.get(position);
+        int focusedItem = 0;
         listRowViewHolder.itemView.setSelected(focusedItem == position);
-
         listRowViewHolder.getLayoutPosition();
 
-        mImageLoader = YaSingleton.getInstance(mContext).getImageLoader();
-
+        // инициализация mImageLoader для подгрузки картинки coverSmall из кэша устройства (если она там есть)
+        RequestQueue queue= YaSingleton.getInstance(mContext.getApplicationContext()).getRequestQueue();
+        ImageLoader mImageLoader = new ImageLoader(queue, new LruBitmapCache(LruBitmapCache.getCacheSize(mContext)));
         listRowViewHolder.coverSmall.setImageUrl(listItems.getCoverSmallUrl(), mImageLoader);
+
+        // если coverSmall ещё не загружено, ставится изображение по-умолчанию placeholder
         listRowViewHolder.coverSmall.setDefaultImageResId(R.drawable.placeholder);
 
-        // Имя исполнителя
+        // имя исполнителя проходит через декодер для исправления кодировки
+        // и корректного отображения русского языка
         String nameDecoded = stringDecoder(listItems.getName());
         listRowViewHolder.name.setText(nameDecoded);
 
-        // Жанры
+        // запись последовательности жанров в переменную genresStr
+        // с добавлением запятой после каждого объекта
         String genresStr = "";
         for (String str : listItems.getGenres()) {
             genresStr += str + ", ";
         }
 
-        // убираем запятую в конце списка жанров
+        // убирает лишнюю запятую в конце переменной genresStr
         genresStr = genresStr.length() > 0 ? genresStr.substring(0, genresStr.length() - 2):genresStr;
         listRowViewHolder.genres.setText(genresStr);
 
-        // Альбомы
+        // в albumsStr записывается (количество альбомов) + (правильное окончание) + разделитель (",")
+        // getEnding отвечает за выбор правильного окончания после числительного из albumsEnding
         String albumsStr = getEnding(listItems.getAlbums(), albumsEnding) + ", ";
         listRowViewHolder.albums.setText(albumsStr);
 
-        // Треки
+        // в tracksStr записывается (количество альбомов) + (правильное окончание)
+        // getEnding отвечает за выбор правильного окончания после числительного из tracksEnding
         String tracksStr = getEnding(listItems.getTracks(), tracksEnding);
         listRowViewHolder.tracks.setText(tracksStr);
     }
@@ -84,7 +89,6 @@ public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.Li
         protected TextView genres;
         protected TextView albums;
         protected TextView tracks;
-       // protected RelativeLayout relativeLayout;
 
         public ListRowViewHolder (View view) {
             super(view);
@@ -100,18 +104,25 @@ public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.Li
         // обработка нажатия на элемент списка
         @Override
         public void onClick(View v) {
+
+            // текущая позиция в списке берётся из адаптера
             int position = getAdapterPosition();
 
             Artist a = artistList.get(position);
 
+            // формирование интента для отправки в DetailActivity
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
             intent.putExtra("coverBig", a.getCoverBigUrl());
 
+            // genres, albums, tracks и name прошли предварительную обработку
+            // перед показом в списке в onBindViewHolder. Их значения забираются из (TextView)
             TextView genres = (TextView) v.findViewById(R.id.genres);
             intent.putExtra("genres", genres.getText().toString());
 
             TextView albums = (TextView) v.findViewById(R.id.albums);
             String detAlbums = albums.getText().toString();
+
+            // замена разделителя между альбомами и треками перед отправкой в DetailActivity
             detAlbums = detAlbums.replace(", "," • ");
             intent.putExtra("albums", detAlbums);
 
@@ -121,15 +132,18 @@ public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.Li
             TextView name = (TextView) v.findViewById(R.id.name);
             intent.putExtra("name", name.getText().toString());
 
+            // описание проходит через декодер для исправления кодировки и корректного отображения русского языка
             String descDecoded = stringDecoder(a.getDescription());
             String descCap = descDecoded.substring(0,1).toUpperCase() + descDecoded.substring(1);
             intent.putExtra("description", descCap);
 
             intent.putExtra("link",a.getLink());
 
+            // отображение выбранной позиции и исполнителя в логе
             Log.d("Position: ", Integer.toString(position));
             Log.d("Artist: ", name.getText().toString());
             mContext.startActivity(intent);
+
             }
     }
 
@@ -143,7 +157,7 @@ public class YaRecyclerAdapter extends RecyclerView.Adapter<YaRecyclerAdapter.Li
         return (null != artistList ? artistList.size() : 0);
     }
 
-    // метод исправляет кодировку в русских названиях (name) и описаниях (description)
+    // метод исправляет кодировку, используется при обработке названий (name) и описаний (description)
     public String stringDecoder(String parsedStr) {
         String decodedStr = "";
 

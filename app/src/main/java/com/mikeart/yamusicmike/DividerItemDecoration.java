@@ -11,9 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by Mike on 23.04.2016.
- */
+// Создание разделителя между объектами списка RecyclerView
+// Исходный код: https://gist.github.com/zokipirlo/82336d89249e05bba5aa
+
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private boolean mShowFirstDivider = false;
