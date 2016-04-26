@@ -22,7 +22,7 @@ Task Description: Make Android application using Java. Parse JSON data from prov
 #####Features:
 * Parsing JSON using Volley library 
 
-I choose Volley instead of others options (retrofit + picaso etc.) cause it supports nice caching, network images out of the box.
+Volley library is used to parse JSON. A singleton pattern implemented to set up a Request Queue. I choose Volley instead of other options (retrofit + picaso etc.) cause it supports nice caching, network images out of the box.
 And ammount of data to catch from JSON is really not that big. Volley handles it quite well.
 * Sorting. 
 
