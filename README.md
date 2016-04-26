@@ -7,6 +7,8 @@ https://www.dropbox.com/s/7v5ug4968zdaptz/YaMusicMike.apk?dl=0
 Task Description: Make Android application using Java. Parse JSON data from provided source. Base view should contain 2 screens:
 1) List of Artists. 2) Detail information. Any additional libraries are allowed.
 
+* * *
+
 #### Application contains 3 acivities:
 
 - ListActivity contains list of artists with some further details (based on RecyclerView)
@@ -42,6 +44,15 @@ Toast messages are shown if something is wrong.
 
 Divider in RecyclerView provided by DividerItemDecoration.class. Collapsing toolbar layout in DetailActivity. It just looks nice :-) 
 
+#####Additional JAVA classes:
+
+* YaRecyclerAdapter.class custom adapter and ViewHolder with onClick action handling.
+* YaSingleton.class provides RequestQueue and ImageLoader functionality.
+* LruBitmapCache.class extends the LruCache class and implements the ImageLoader.ImageCache interface.
+* CheckNetwork.class to check network state (obviously).
+* DividerItemDecoration.class adds a divider between items in RecyclerView.
+
+***
 
 
 
