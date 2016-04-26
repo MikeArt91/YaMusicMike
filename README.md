@@ -7,11 +7,11 @@ https://www.dropbox.com/s/7v5ug4968zdaptz/YaMusicMike.apk?dl=0
 Task Description: Make Android application using Java. Parse JSON data from provided source. Base view should contain 2 screens:
 1) List of Artists. 2) Detail information. Any additional libraries are allowed.
 
-#### My application contains 3 acivities:
+#### Application contains 3 acivities:
 
 - ListActivity contains list of artists with some further details (based on RecyclerView)
 - DetailActivity provides description of the Artist and a FloatingButton which leads to WebViewActivity
-- WebViewActivity will show artist's personal page on the Internet (if he has one)
+- WebViewActivity will show artist's personal page on the Internet (if there is one)
 
 <p align="center">
   <img src="/screenshots/ListActivity.png" alt="ListActivity" width="250"/>
@@ -41,5 +41,8 @@ Toast messages are shown if something is wrong.
 * Design
 
 Divider in RecyclerView provided by DividerItemDecoration.class. Collapsing toolbar layout in DetailActivity. It just looks nice :-) 
+
+
+
 
 
