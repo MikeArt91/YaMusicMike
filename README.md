@@ -7,6 +7,8 @@ https://www.dropbox.com/s/7v5ug4968zdaptz/YaMusicMike.apk?dl=0
 Task Description: Make Android application using Java. Parse JSON data from provided source. Base view should contain 2 screens:
 1) List of Artists. 2) Detail information. Any additional libraries are allowed.
 
+##### UPD: This app was approved by Yandex
+
 * * *
 
 #### Application contains 3 acivities:
