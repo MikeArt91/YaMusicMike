@@ -1,5 +1,5 @@
 # YaMusicMike
-#### Test task for Yandex Summer School 2016 ("Mobilization" Project)
+#### Test task for Yandex Summer School 2016
 
 APK is availiable for download via that link:
 https://www.dropbox.com/s/7v5ug4968zdaptz/YaMusicMike.apk?dl=0
